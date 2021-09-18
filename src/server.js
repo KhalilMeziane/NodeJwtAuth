@@ -2,7 +2,6 @@
 const HTTP = require('http')
 const chalk = require('chalk')
 const app = require('./api/app')
-// eslint-disable-next-line no-undef
 const PORT = normalizePort(process.env.PORT || 3000)
 
 // setup port

@@ -2,11 +2,10 @@
 const express = require('express')
 const morganMiddleware = require('../config/logger')
 const app = express()
-const chalk = require('chalk')
 const routes = require('./routes')
 const cors = require('cors')
 const helmet = require("helmet")
-const mongoose = require('mongoose')
+const { connect } = require('../config/database')
 
 // setup dotenv for environment variable
 require('dotenv').config()
@@ -24,13 +23,7 @@ app.use(morganMiddleware)
 app.use(express.json())
 
 // connect to database
-async function connect(){
-    await mongoose.connect(process.env.DB_URI,{useNewUrlParser: true, useUnifiedTopology: true})
-    console.log(chalk.bgGreen('Database Connected Successfully'))
-}
-connect().catch((error)=>{
-    console.log(chalk.bgRed('Error When Connect To Database: ', error))
-})
+app.use(connect)
 
 // setup main route
 app.use(routes)
