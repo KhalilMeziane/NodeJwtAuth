@@ -1,6 +1,7 @@
 1 - [!!] setup env for dev and production 
-2 - set up loggers and auditors for app
-3 - set up swagger for document apis
+2 - setup loggers and auditors for app
+3 - setup swagger for document apis
 4 - best practices when building rest api node js
-5 - [Y] set up eslint
+5 - [Y] setup eslint
 6 - set up packages for rest api nodejs(cors - helmet - http-errors- eslint-plugin-security ...)
+7- setup mongoose and connect to db

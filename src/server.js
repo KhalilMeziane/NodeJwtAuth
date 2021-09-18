@@ -13,7 +13,7 @@ const server = HTTP.createServer(app)
 
 // server listen
 server.listen(PORT,()=>{
-    console.log(`host: ${chalk.hex('#ffb142').bold(`http://localhost:${PORT}`)}`)
+    console.log(`host: ${chalk.bgBlue(`http://localhost:${PORT}`)}`)
 })
 
 // normalizePort
