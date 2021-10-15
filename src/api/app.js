@@ -12,15 +12,20 @@ const rateLimit = require("express-rate-limit")
 // setup dotenv for environment variable
 require('dotenv').config()
 
+// setup express-rate-limit limit repeated requests
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    handler:(req,res)=>{
+        return res.status(429).json({
+            error:'You sent too many requests. Please wait a while then try again'
+        })
+    }
+})
+app.use("/api", apiLimiter)
+
 // setup helmet for setting various HTTP headers
 app.use(helmet())
-
-// setup express-rate-limit limit repeated requests
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100
-})
-app.use(limiter)
 
 // enable cors for application
 app.use(cors())
