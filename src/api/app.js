@@ -7,12 +7,20 @@ const mongoose = require('mongoose')
 const routes = require('./routes')
 const cors = require('cors')
 const helmet = require("helmet")
+const rateLimit = require("express-rate-limit")
 
 // setup dotenv for environment variable
 require('dotenv').config()
 
 // setup helmet for setting various HTTP headers
 app.use(helmet())
+
+// setup express-rate-limit limit repeated requests
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+})
+app.use(limiter)
 
 // enable cors for application
 app.use(cors())
