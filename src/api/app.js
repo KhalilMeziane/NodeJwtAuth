@@ -8,6 +8,7 @@ const routes = require('./routes')
 const cors = require('cors')
 const helmet = require("helmet")
 const rateLimit = require("express-rate-limit")
+const createError = require('http-errors')
 
 // setup dotenv for environment variable
 require('dotenv').config()
@@ -48,7 +49,20 @@ async function connect(){
 connect()
 
 // setup main route
-app.use(routes)
+app.use("/api",routes)
+
+// 404 route
+app.use((req,res,next)=>{
+    next(createError.NotFound())
+})
+app.use((err,req,res,next)=>{
+    res.status(err.status || 500).json({
+        error:{
+            status: err.status,
+            message: err.message
+        }
+    })
+})
 
 // export app
 module.exports = app
