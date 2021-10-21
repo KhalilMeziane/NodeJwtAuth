@@ -1,18 +1,10 @@
 // main file for all routes app
 const router = require('express').Router()
-
 // import all app routes from components folder
+const auth = require('./components/auth/route')
 
-
-// home route
-router.get('/',(req,res)=>{
-    res.status(200).json({
-        message: 'server work from routes file',
-        path: req.url
-    })
-})
-
-// auth routes
+// authentication routes component
+router.use('/auth',auth)
 
 // export router
 module.exports = router
