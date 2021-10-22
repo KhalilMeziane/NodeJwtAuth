@@ -36,7 +36,7 @@ app.use(morganMiddleware)
 app.use(express.json())
 
 // connect to database
-require('../helpers/db')
+require('../helpers/db_helper')
 
 // setup main route
 app.use("/api",routes)
@@ -45,6 +45,7 @@ app.use("/api",routes)
 app.use((req,res,next)=>{
     next(createError.NotFound())
 })
+
 app.use((err,req,res,next)=>{
     res.status(err.status || 500).json({
         error:{
