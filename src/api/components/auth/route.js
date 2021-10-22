@@ -2,7 +2,9 @@ const router = require('express').Router()
 const createError = require('http-errors')
 const UserSchema = require('./model')
 const Joi = require('joi')
-const { signAccessToken, loginAccessToken } = require('../../../helpers/jwt_helper')
+const { signAccessToken, loginAccessToken, profileAccessToken } = require('../../../helpers/jwt_helper')
+const User = require('./model')
+const { verifyAuthorization } = require('../../Middlewares/auth_middleware')
 
 // signin route
 router.post("/register",async (req,res,next)=>{
@@ -63,6 +65,25 @@ router.post('/login',async (req,res,next)=>{
             error.status = 422
         }
         next(createError.InternalServerError())
+    }
+})
+
+// profile route
+router.get('/profile',verifyAuthorization, async (req,res,next)=>{
+    if(!req.headers['authorization']){
+        throw createError.Unauthorized()
+    }
+    try{
+        const authHeader = req.headers['authorization']
+        const bearerToken = authHeader.split(' ')
+        const token = bearerToken[1]
+        const payload = await profileAccessToken(token)
+        const user = await User.findById(payload.aud)
+        res.json({
+            user: user
+        })
+    }catch(error){
+        next(createError.Unauthorized())
     }
 })
 

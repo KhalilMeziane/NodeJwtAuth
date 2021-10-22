@@ -21,11 +21,9 @@ const signAccessToken = (userId)=>{
 // generate access token for login
 const loginAccessToken = (userId)=>{
     return new Promise((resolve,reject)=>{
-        const payload = {
-            iss: "khalil.com",
-        }
+        const payload = {}
         const options = {
-            expiresIn: "15m",
+            expiresIn: "8h",
             issuer: "khalil.com",
             audience: userId
         }
@@ -38,7 +36,20 @@ const loginAccessToken = (userId)=>{
     })
 }
 
+// profile access token
+const profileAccessToken = (token)=>{
+    return new Promise((resolve,reject)=>{
+        JWT.verify(token,process.env.ACCESS_TOKEN_SECRET,(error,payload)=>{
+            if(error){
+                reject(error)
+            }
+            resolve(payload)
+        })
+    })
+}
+
 module.exports = {
     signAccessToken,
-    loginAccessToken
+    loginAccessToken,
+    profileAccessToken
 }
