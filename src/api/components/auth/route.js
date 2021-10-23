@@ -2,7 +2,7 @@ const router = require('express').Router()
 const createError = require('http-errors')
 const UserSchema = require('./model')
 const Joi = require('joi')
-const { signAccessToken, loginAccessToken, profileAccessToken } = require('../../../helpers/jwt_helper')
+const { signAccessToken, loginAccessToken, profileAccessToken, signRefreshToken, verifyRefreshToken } = require('../../../helpers/jwt_helper')
 const User = require('./model')
 const { verifyAuthorization } = require('../../Middlewares/auth_middleware')
 
@@ -25,10 +25,12 @@ router.post("/register",async (req,res,next)=>{
         })
         const savedNewUser = await newUser.save()
         const token = await signAccessToken(savedNewUser.id)
+        const refreshToken = await signRefreshToken(savedNewUser.id)
         res.status(201).json({
             message:'successful registration',
             body: savedNewUser,
-            token: token
+            accessToken: token,
+            refreshToken: refreshToken
         })
     }catch(error){
         if(error.isJoi === true){
@@ -56,9 +58,11 @@ router.post('/login',async (req,res,next)=>{
             throw createError.Unauthorized("email or password not valid")
         }
         const token = await loginAccessToken(user.id)
+        const refreshToken = await signRefreshToken(user.id)
         res.status(201).json({
             message:'successful login',
-            token: token
+            accessToken: token,
+            refreshToken: refreshToken
         })
     }catch(error){
         if(error.isJoi === true){
@@ -84,6 +88,25 @@ router.get('/profile',verifyAuthorization, async (req,res,next)=>{
         })
     }catch(error){
         next(createError.Unauthorized())
+    }
+})
+
+// refresh token route
+router.post('/refresh-token',async (req,res,next)=>{
+    try{
+        const { refreshToken } = req.body
+        if(!refreshToken){
+            throw createError.BadRequest()
+        }
+        const userId = await verifyRefreshToken(refreshToken)
+        const newAccessToken = await signAccessToken(userId)
+        const newRefreshToken = await signRefreshToken(userId)
+        res.status(201).json({
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
+        })
+    }catch(error){
+        next(error)
     }
 })
 

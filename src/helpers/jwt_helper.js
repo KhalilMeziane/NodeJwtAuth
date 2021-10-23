@@ -1,17 +1,18 @@
 const JWT = require('jsonwebtoken')
 const createError = require('http-errors')
+
 // generate access token for registration
 const signAccessToken = (userId)=>{
     return new Promise((resolve,reject)=>{
         const payload = {}
         const options = {
-            expiresIn: "15m",
+            expiresIn: "1y",
             issuer: "khalil.com",
             audience: userId
         }
-        JWT.sign(payload,process.env.ACCESS_TOKEN_SECRET,options,(error,token)=>{
+        JWT.sign(payload,process.env.REFRESH_TOKEN_SECRET,options,(error,token)=>{
             if(error){
-                reject(error)
+                reject(createError.InternalServerError(error))
             }
             resolve(token)
         })
@@ -36,6 +37,8 @@ const loginAccessToken = (userId)=>{
     })
 }
 
+// this end point need changes look to auth middleware
+// because i have put payload of user in req object we dont need verify again
 // profile access token
 const profileAccessToken = (token)=>{
     return new Promise((resolve,reject)=>{
@@ -48,8 +51,41 @@ const profileAccessToken = (token)=>{
     })
 }
 
+// sign refresh token
+const signRefreshToken = (userId)=>{
+    return new Promise((resolve,reject)=>{
+        const payload = {}
+        const options = {
+            expiresIn: "15m",
+            issuer: "khalil.com",
+            audience: userId
+        }
+        JWT.sign(payload,process.env.REFRESH_TOKEN_SECRET,options,(error,token)=>{
+            if(error){
+                reject(createError.InternalServerError(error))
+            }
+            resolve(token)
+        })
+    })
+}
+
+// verify Refresh Token
+const verifyRefreshToken = (refreshToken)=>{
+    return new Promise((resolve,reject)=>{
+        JWT.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET,(error,payload)=>{
+            if(error){
+                return reject(createError.Unauthorized())
+            }
+            const userId = payload.aud
+            resolve(userId)
+        })
+    })
+}
+
 module.exports = {
     signAccessToken,
     loginAccessToken,
-    profileAccessToken
+    profileAccessToken,
+    signRefreshToken,
+    verifyRefreshToken
 }
