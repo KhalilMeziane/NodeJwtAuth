@@ -1,5 +1,6 @@
 const JWT = require('jsonwebtoken')
 const createError = require('http-errors')
+const client = require('../helpers/redis_helper')
 
 // generate access token for registration
 const signAccessToken = (userId)=>{
@@ -57,14 +58,21 @@ const signRefreshToken = (userId)=>{
         const payload = {}
         const options = {
             expiresIn: "15m",
-            issuer: "khalil.com",
+            issuer: "beInRide.com",
             audience: userId
         }
         JWT.sign(payload,process.env.REFRESH_TOKEN_SECRET,options,(error,token)=>{
             if(error){
                 reject(createError.InternalServerError(error))
             }
-            resolve(token)
+            // set refresh token in redis
+            client.SET(userId,token,"EX",365*24*60*60,(error,replay)=>{
+                if(error){
+                    reject(createError.InternalServerError(error))
+                }
+                console.log("replay: ",replay)
+                resolve(token)
+            })
         })
     })
 }

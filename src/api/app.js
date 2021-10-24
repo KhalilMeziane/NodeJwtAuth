@@ -35,9 +35,11 @@ app.use(morganMiddleware)
 // enable express to parse request body of type application/json
 app.use(express.json())
 
-// connect to database
+// connect to mongodb database
 require('../helpers/db_helper')
 
+// connect to redis database
+require('../helpers/redis_helper')
 // setup main route
 app.use("/api",routes)
 
