@@ -5,6 +5,7 @@ const Joi = require('joi')
 const { signAccessToken, loginAccessToken, profileAccessToken, signRefreshToken, verifyRefreshToken } = require('../../../helpers/jwt_helper')
 const User = require('./model')
 const { verifyAuthorization } = require('../../Middlewares/auth_middleware')
+const client = require('../../../helpers/redis_helper')
 
 // signin route
 router.post("/register",async (req,res,next)=>{
@@ -73,7 +74,8 @@ router.post('/login',async (req,res,next)=>{
 })
 
 // profile route
-router.get('/profile',verifyAuthorization, async (req,res,next)=>{
+// this route need to change
+router.get('/profile', verifyAuthorization, async (req,res,next)=>{
     if(!req.headers['authorization']){
         throw createError.Unauthorized()
     }
@@ -104,6 +106,26 @@ router.post('/refresh-token',async (req,res,next)=>{
         res.status(201).json({
             accessToken: newAccessToken,
             refreshToken: newRefreshToken
+        })
+    }catch(error){
+        next(error)
+    }
+})
+
+// logout route
+router.delete('/logout' ,async (req,res,next)=>{
+    try{
+        const { refreshToken } = req.body 
+        if(!refreshToken){
+            throw createError.BadRequest()
+        }
+        const userId = await verifyRefreshToken(refreshToken)
+        client.DEL(userId,(error,value)=>{
+            if(error){
+                throw createError.InternalServerError()
+            }
+            console.log('value: ', value)
+            res.sendStatus(204)
         })
     }catch(error){
         next(error)

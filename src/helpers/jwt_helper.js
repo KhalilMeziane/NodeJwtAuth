@@ -57,7 +57,7 @@ const signRefreshToken = (userId)=>{
     return new Promise((resolve,reject)=>{
         const payload = {}
         const options = {
-            expiresIn: "15m",
+            expiresIn: "1y",
             issuer: "beInRide.com",
             audience: userId
         }
@@ -68,7 +68,7 @@ const signRefreshToken = (userId)=>{
             // set refresh token in redis
             client.SET(userId,token,"EX",365*24*60*60,(error,replay)=>{
                 if(error){
-                    reject(createError.InternalServerError(error))
+                    reject(createError.InternalServerError())
                 }
                 console.log("replay: ",replay)
                 resolve(token)
@@ -85,7 +85,18 @@ const verifyRefreshToken = (refreshToken)=>{
                 return reject(createError.Unauthorized())
             }
             const userId = payload.aud
-            resolve(userId)
+
+            // verifyRefreshToken id refresh token exist in redis db
+            client.GET(userId,(error,result)=>{
+                if(error){
+                    reject(createError.InternalServerError())
+                }
+                console.log("result: ",result)
+                if(refreshToken === result){
+                    resolve(userId)
+                }
+                reject(createError.Unauthorized())
+            })
         })
     })
 }
