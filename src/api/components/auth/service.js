@@ -1,6 +1,7 @@
 const UserSchema = require('./model')
 const createError = require('http-errors')
-const { signAccessToken, loginAccessToken, profileAccessToken, signRefreshToken, verifyRefreshToken } = require('../../../helpers/jwt_helper')
+const client = require('../../../helpers/redis_helper')
+const { signAccessToken, loginAccessToken, signRefreshToken, verifyRefreshToken } = require('../../../helpers/jwt_helper')
 
 const registerService = async (req,res,next)=>{
     const { email, password } = req.body
@@ -49,7 +50,39 @@ const loginService = async (req,res,next)=>{
     }
 }
 
+const refreshTokenService = async (req,res,next)=>{
+    try{
+        const { refreshToken } = req.body
+        const userId = await verifyRefreshToken(refreshToken)
+        const newAccessToken = await signAccessToken(userId)
+        const newRefreshToken = await signRefreshToken(userId)
+        res.status(201).json({
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
+const logoutService = async (req,res,next)=>{
+    try{
+        const { refreshToken } = req.body 
+        const userId = await verifyRefreshToken(refreshToken)
+        client.DEL(userId,(error,value)=>{
+            if(error){
+                throw createError.InternalServerError()
+            }
+            res.sendStatus(204)
+        })
+    }catch(error){
+        next(error)
+    }
+}
+
 module.exports = {
     registerService,
-    loginService
+    loginService,
+    refreshTokenService,
+    logoutService
 }

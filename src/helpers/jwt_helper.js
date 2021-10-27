@@ -91,7 +91,6 @@ const verifyRefreshToken = (refreshToken)=>{
                 if(error){
                     reject(createError.InternalServerError())
                 }
-                console.log("result: ",result)
                 if(refreshToken === result){
                     resolve(userId)
                 }

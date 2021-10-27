@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const createError = require('http-errors')
 
 const registerController = async (req,res,next) => {
     const schema = Joi.object().keys({
@@ -35,7 +36,33 @@ const loginController = async (req,res,next)=>{
     }
 }
 
+const refreshTokenController = async (req,res,next) => {
+    try{
+        const { refreshToken } = req.body
+        if(!refreshToken){
+            throw createError.BadRequest()
+        }
+        next()
+    }catch(error){
+        next(error)
+    }
+}
+
+const logoutController = (req,res,next)=>{
+    try{
+        const { refreshToken } = req.body 
+        if(!refreshToken){
+            throw createError.BadRequest()
+        }
+        next()
+    }catch(error){
+        next(error)
+    }
+}
+
 module.exports = {
     registerController,
-    loginController
+    loginController,
+    refreshTokenController,
+    logoutController
 }
