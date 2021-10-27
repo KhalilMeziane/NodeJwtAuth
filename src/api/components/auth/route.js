@@ -8,43 +8,14 @@ const { verifyAuthorization } = require('../../Middlewares/auth_middleware')
 const client = require('../../../helpers/redis_helper')
 
 // mvc
-const { registerService } = require('./service')
-const { registerController } = require('./controller')
+const { registerService, loginService } = require('./service')
+const { registerController, loginController } = require('./controller')
 
 // signin route
 router.post("/register",registerController,registerService)
 
 // login route
-router.post('/login',async (req,res,next)=>{
-    const schema = Joi.object().keys({
-        email: Joi.string().email().lowercase().required(),
-        password: Joi.string().min(6).required()
-    })
-    try{
-        const { email, password } = req.body
-        const check = await schema.validateAsync({ email, password })
-        const user = await UserSchema.findOne({ email: check.email})
-        if(!user){
-            throw createError.BadRequest(`invalid email or password`)
-        }
-        const isMatch = await user.comparePassword(check.password)
-        if(!isMatch){
-            throw createError.Unauthorized("email or password not valid")
-        }
-        const token = await loginAccessToken(user.id)
-        const refreshToken = await signRefreshToken(user.id)
-        res.status(201).json({
-            message:'successful login',
-            accessToken: token,
-            refreshToken: refreshToken
-        })
-    }catch(error){
-        if(error.isJoi === true){
-            error.status = 422
-        }
-        next(createError.InternalServerError())
-    }
-})
+router.post('/login',loginController,loginService)
 
 // profile route
 // this route need to change
