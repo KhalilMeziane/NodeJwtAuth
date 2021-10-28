@@ -56,7 +56,6 @@ const signRefreshToken = (userId)=>{
                 if(error){
                     reject(createError.InternalServerError())
                 }
-                console.log("replay: ",replay)
                 resolve(token)
             })
         })

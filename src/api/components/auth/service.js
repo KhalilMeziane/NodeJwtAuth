@@ -30,20 +30,33 @@ const registerService = async (req,res,next)=>{
 const loginService = async (req,res,next)=>{
     const { email, password } = req.body
     try{
+        
         const user = await UserSchema.findOne({ email: email})
+        
+
         if(!user){
             throw createError.BadRequest(`invalid email or password`)
         }
+        console.time()
         const isMatch = await user.comparePassword(password)
+        console.timeEnd()
         if(!isMatch){
             throw createError.Unauthorized("invalid email or password")
         }
-        const token = await loginAccessToken(user.id)
-        const refreshToken = await signRefreshToken(user.id)
+        // old way
+        // const accessToken = await loginAccessToken(user.id)
+        // const refreshToken = await signRefreshToken(user.id)
+        // new way
+        const resolveResult = await Promise.all([
+            loginAccessToken(user.id),
+            signRefreshToken(user.id)
+        ])
+        // console.log("resolve: ", resolve)
+
         res.status(201).json({
             message:'successful login',
-            accessToken: token,
-            refreshToken: refreshToken
+            accessToken: resolveResult[0],
+            refreshToken: resolveResult[1]
         })
     }catch(error){
         next(error)
