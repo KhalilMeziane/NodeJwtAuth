@@ -1,10 +1,10 @@
 const router = require('express').Router()
-const { profileController } = require('./controller')
+// const {  } = require('./controller')
 const { profileService } = require('./service')
-// const { profileAccessToken } = require('../../../helpers/jwt_helper')
+const { verifyAuthorization } = require('../../Middlewares/auth_middleware')
 
 // profile route
-router.get('/profile', profileController, profileService)
+router.get('/profile', verifyAuthorization, profileService)
 
 
 module.exports = router

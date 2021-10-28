@@ -38,20 +38,6 @@ const loginAccessToken = (userId)=>{
     })
 }
 
-// this end point need changes look to auth middleware
-// because i have put payload of user in req object we dont need verify again
-// profile access token
-const profileAccessToken = (token)=>{
-    return new Promise((resolve,reject)=>{
-        JWT.verify(token,process.env.ACCESS_TOKEN_SECRET,(error,payload)=>{
-            if(error){
-                reject(error)
-            }
-            resolve(payload)
-        })
-    })
-}
-
 // sign refresh token
 const signRefreshToken = (userId)=>{
     return new Promise((resolve,reject)=>{
@@ -103,7 +89,6 @@ const verifyRefreshToken = (refreshToken)=>{
 module.exports = {
     signAccessToken,
     loginAccessToken,
-    profileAccessToken,
     signRefreshToken,
     verifyRefreshToken
 }

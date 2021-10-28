@@ -46,7 +46,7 @@ const loginService = async (req,res,next)=>{
             refreshToken: refreshToken
         })
     }catch(error){
-        next(createError.InternalServerError())
+        next(error)
     }
 }
 
