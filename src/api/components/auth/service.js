@@ -15,12 +15,14 @@ const registerService = async (req,res,next)=>{
             password: password
         })
         const savedNewUser = await newUser.save()
-        const accessToken = await signAccessToken(savedNewUser.id)
-        const refreshToken = await signRefreshToken(savedNewUser.id)
+        const resolveResult = await Promise.all([
+            signAccessToken(savedNewUser.id),
+            signRefreshToken(savedNewUser.id)
+        ])
         res.status(201).json({
             message:'successful registration',
-            accessToken: accessToken,
-            refreshToken: refreshToken
+            accessToken: resolveResult[0],
+            refreshToken: resolveResult[1]
         })
     }catch(error){
         next(error)
