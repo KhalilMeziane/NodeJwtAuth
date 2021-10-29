@@ -11,7 +11,7 @@ const signAccessToken = (userId)=>{
             issuer: "khalil.com",
             audience: userId
         }
-        JWT.sign(payload,process.env.REFRESH_TOKEN_SECRET,options,(error,token)=>{
+        JWT.sign(payload,process.env.ACCESS_TOKEN_SECRET,options,(error,token)=>{
             if(error){
                 reject(createError.InternalServerError(error))
             }

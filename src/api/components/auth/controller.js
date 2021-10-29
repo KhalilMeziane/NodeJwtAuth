@@ -27,7 +27,6 @@ const loginController = async (req,res,next)=>{
         const { email, password } = req.body
         await schema.validateAsync({ email, password })
         next()
-
     }catch(error){
         if(error.isJoi === true){
             error.status = 422
