@@ -4,7 +4,7 @@ const client = require('../../../helpers/redis_helper')
 const { signAccessToken, loginAccessToken, signRefreshToken, verifyRefreshToken } = require('../../../helpers/jwt_helper')
 
 const registerService = async (req,res,next)=>{
-    const { email, password } = req.body
+    const { email, password, confirm, name } = req.body
     try{
         const user = await UserSchema.findOne({ email: email})
         if(user){
@@ -12,7 +12,9 @@ const registerService = async (req,res,next)=>{
         }
         const newUser = new UserSchema({
             email: email,
-            password: password
+            password: password,
+            confirm: confirm,
+            name: name
         })
         const savedNewUser = await newUser.save()
         const resolveResult = await Promise.all([

@@ -5,6 +5,8 @@ const registerController = async (req,res,next) => {
     const registerSchema = yup.object({
         email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
         password: yup.string().min(6).max(255).required(),
+        confirm: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required('Confirm password is required'),
+        name: yup.string().min(6).max(255).required()
     })
     try{
         await registerSchema.validate(req.body, { abortEarly: false })
@@ -13,7 +15,10 @@ const registerController = async (req,res,next) => {
         if(error.errors){
             error.status = 422
         }
-        next({message: error.errors})
+        next({
+            message: error.errors,
+            status: error.status || 500
+        })
     }
 }
 
@@ -29,7 +34,10 @@ const loginController = async (req,res,next)=>{
         if(error.errors){
             error.status = 422
         }
-        next({message: error.errors})
+        next({
+            message: error.errors,
+            status: error.status || 500
+        })
     }
 }
 

@@ -10,15 +10,21 @@ const UserSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true
+    },
+    confirm:{
+        type: String,
+        required: true
+    },
+    name:{
+        type: String,
+        required: true
     }
 })
 
 UserSchema.pre('save', async function (next){
     try{
-        console.time()
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(this.password, salt)
-        console.timeEnd()
         this.password = hashedPassword
         next()
     }catch(error){
