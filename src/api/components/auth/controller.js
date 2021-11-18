@@ -3,8 +3,8 @@ const createError = require('http-errors')
 
 const registerController = async (req,res,next) => {
     const schema = Joi.object().keys({
-        email: Joi.string().email().lowercase().required(),
-        password: Joi.string().min(6).required()
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
     })
     try{
         const { email, password } = req.body
@@ -14,6 +14,7 @@ const registerController = async (req,res,next) => {
         if(error.isJoi === true){
             error.status = 422
         }
+        console.log(error)
         next(error)
     }
 }

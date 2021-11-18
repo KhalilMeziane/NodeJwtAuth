@@ -7,8 +7,6 @@ const cors = require('cors')
 const helmet = require("helmet")
 const rateLimit = require("express-rate-limit")
 const createError = require('http-errors')
-const swaggerUi = require("swagger-ui-express")
-const swaggerDocs = require('../config/swagger.json')
 
 // setup dotenv for environment variable
 require('dotenv').config()
@@ -42,9 +40,6 @@ require('../helpers/db_helper')
 
 // connect to redis database
 require('../helpers/redis_helper')
-
-// setup swagger
-app.use("/beInRide-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 // setup main route
 app.use("/api",routes)
