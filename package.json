@@ -1,5 +1,5 @@
 {
-  "name": "be-in-ride",
+  "name": "NodeJwtAuth",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",

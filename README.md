@@ -2,15 +2,25 @@
 Build Authentication system(RestApi) using express js, mongodb and redis
  ## Project Structure 
 ┌ `src`\
-├─ `api` - \
-├── `components` - \
-├── `middlewares` - \
-├── `app.js` - \
-├── `routes.js` - \
-├─ `config` - \
-├─ `helpers` - \
-├─ `server.js` - \
-└ `.eslintrc.json` - \
+├─ `api`
+├── `components`
+├─── `auth`
+├──── `controller.js`
+├──── `model.js`
+├──── `route.js`
+├──── `service.js`
+├── `middlewares`
+├─── `auth_middleware.js`
+├── `app.js`
+├── `routes.js`
+├─ `config`
+├── `logger.js`
+├─ `helpers`
+├── `db_helper.js`
+├── `jwt_helper.js`
+├── `redis_helper.js`
+├─ `server.js`
+└ `.eslintrc.json`
 
 ## Usage 
 These instructions will get you a copy of the project up and running on your local machine
@@ -25,7 +35,7 @@ From your command line, first clone the repository into your local machine:
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/MezianeKhalil/BeInRide.git
+$ git clone https://github.com/MezianeKhalil/NodeJwtAuth.git
 # Then go into the repository
 $ cd BeInRide
 # Then remove current remote repository
