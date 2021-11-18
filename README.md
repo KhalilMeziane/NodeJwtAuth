@@ -1,19 +1,48 @@
-# BeInRide
-Rest Api build with express js, mongodb & redis
-## Introduction
- Transportation is a major issue in our world today. Carpooling is a solution to the problems of traffic jams, pollution, and extra use of fuel.
- Our application is an attempt to make a system which is user friendly and provides an opportunity to share cars. The service will allow users to offer and request ride sharing journeys.
-## Requirements
-- node js
-- mongodb
-- redis
-## Quick Start
+# Stateful authentication with json web token
+Build Authentication system(RestApi) using express js, mongodb and redis
+ ## Project Structure 
+┌ `src`\
+├─ `api` - \
+├── `components` - \
+├── `middlewares` - \
+├── `app.js` - \
+├── `routes.js` - \
+├─ `config` - \
+├─ `helpers` - \
+├─ `server.js` - \
+└ `.eslintrc.json` - \
+
+## Usage 
+These instructions will get you a copy of the project up and running on your local machine
+
+### Requirement 
+- [nodejs](https://nodejs.org/en/)
+- [mongodb](https://www.mongodb.com/)
+- [redis](https://redis.io/)
+- [express](https://expressjs.com/)
+## How To Use
+From your command line, first clone the repository into your local machine:
+
 ```bash
-    git clone https://github.com/MezianeKhalil/BeInRide.git
-    cd BeInRide
-    npm install
-    npm run dev
+# Clone this repository
+$ git clone https://github.com/MezianeKhalil/BeInRide.git
+# Then go into the repository
+$ cd BeInRide
+# Then remove current remote repository
+$ git remote remove origin
 ```
-Then visit `http://localhost:3000/`
-## Swagger
-Visit `http://localhost:3000/beInRide-docs` to view the OPEN API document in Swagger-UI
+Install the dependencies:
+```bash
+# Install with NPM
+$ npm install
+```
+Specify your target port:
+``` bash
+# In the .env file
+port=3000
+```
+Lastly launch the Project:
+```bash
+# Launch with NPM
+$ npm start
+```

@@ -1,38 +1,35 @@
-const Joi = require('joi')
 const createError = require('http-errors')
+const yup = require("yup")
 
 const registerController = async (req,res,next) => {
-    const schema = Joi.object().keys({
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+    const registerSchema = yup.object({
+        email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
+        password: yup.string().min(6).max(255).required(),
     })
     try{
-        const { email, password } = req.body
-        await schema.validateAsync({ email, password })
+        await registerSchema.validate(req.body, { abortEarly: false })
         next()
     }catch(error){
-        if(error.isJoi === true){
+        if(error.errors){
             error.status = 422
         }
-        console.log(error)
-        next(error)
+        next({message: error.errors})
     }
 }
 
 const loginController = async (req,res,next)=>{
-    const schema = Joi.object().keys({
-        email: Joi.string().email().lowercase().required(),
-        password: Joi.string().min(6).required()
+    const loginSchema = yup.object({
+        email: yup.string().email('Must be a valid email').max(255).required('Email is required'),
+        password: yup.string().min(6).max(255).required(),
     })
     try{
-        const { email, password } = req.body
-        await schema.validateAsync({ email, password })
+        await loginSchema.validate(req.body, { abortEarly: false })
         next()
     }catch(error){
-        if(error.isJoi === true){
+        if(error.errors){
             error.status = 422
         }
-        next(error)
+        next({message: error.errors})
     }
 }
 
