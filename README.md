@@ -2,26 +2,25 @@
 Build Authentication system(RestApi) using express js, mongodb and redis
  ## Project Structure 
 ┌ `src`\
-├─ `api`
-├── `components`
-├─── `auth`
-├──── `controller.js`
-├──── `model.js`
-├──── `route.js`
-├──── `service.js`
-├── `middlewares`
-├─── `auth_middleware.js`
-├── `app.js`
-├── `routes.js`
-├─ `config`
-├── `logger.js`
-├─ `helpers`
-├── `db_helper.js`
-├── `jwt_helper.js`
-├── `redis_helper.js`
-├─ `server.js`
-└ `.eslintrc.json`
-
+├─ `api` \
+├── `components` \
+├─── `auth` \
+├──── `controller.js` \
+├──── `model.js` \
+├──── `route.js` \
+├──── `service.js` \
+├── `middlewares` \
+├─── `auth_middleware.js` \
+├── `app.js` \
+├── `routes.js` \
+├─ `config` \
+├── `logger.js` \
+├─ `helpers` \
+├── `db_helper.js` \
+├── `jwt_helper.js` \
+├── `redis_helper.js` \
+├─ `server.js` \
+└ `.eslintrc.json` \
 ## Usage 
 These instructions will get you a copy of the project up and running on your local machine
 
