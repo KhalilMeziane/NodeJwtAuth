@@ -7,8 +7,7 @@ const signAccessToken = (userId)=>{
     return new Promise((resolve,reject)=>{
         const payload = {}
         const options = {
-            expiresIn: "1y",
-            issuer: "khalil.com",
+            expiresIn: "15m",
             audience: userId
         }
         JWT.sign(payload,process.env.ACCESS_TOKEN_SECRET,options,(error,token)=>{
@@ -25,8 +24,7 @@ const loginAccessToken = (userId)=>{
     return new Promise((resolve,reject)=>{
         const payload = {}
         const options = {
-            expiresIn: "8h",
-            issuer: "khalil.com",
+            expiresIn: "15m",
             audience: userId
         }
         JWT.sign(payload,process.env.ACCESS_TOKEN_SECRET,options,(error,token)=>{

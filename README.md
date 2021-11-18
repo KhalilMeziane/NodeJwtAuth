@@ -48,10 +48,15 @@ $ npm install
 Specify your target port:
 ``` bash
 # In the .env file
-port=3000
+port = 3000
+DB_URI = 'mongodb://localhost:27017/NodeJWTAuth'
+ACCESS_TOKEN_SECRET = 'your key'
+REFRESH_TOKEN_SECRET = 'your key'
+REDIS_HOST = 6379
+REDIS_PORT = '127.0.0.1'
 ```
 Lastly launch the Project:
 ```bash
 # Launch with NPM
-$ npm start
+$ npm run dev
 ```
