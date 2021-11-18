@@ -20,7 +20,7 @@ Build Authentication system(RestApi) using express js, mongodb and redis
 ├── `jwt_helper.js` \
 ├── `redis_helper.js` \
 ├─ `server.js` \
-└ `.eslintrc.json` \
+└ `.eslintrc.json`
 ## Usage 
 These instructions will get you a copy of the project up and running on your local machine
 
@@ -36,7 +36,7 @@ From your command line, first clone the repository into your local machine:
 # Clone this repository
 $ git clone https://github.com/MezianeKhalil/NodeJwtAuth.git
 # Then go into the repository
-$ cd BeInRide
+$ cd NodeJwtAuth
 # Then remove current remote repository
 $ git remote remove origin
 ```
